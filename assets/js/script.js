@@ -9,7 +9,7 @@ function myFunction() {
       25.7617+
       '&lon='+
       80.1918+
-      '&exclude=minutely,hourly,alerts&appid=f1e5223681c99ba8e38c2214f7c97f43'
+      '&units=imperial&exclude=minutely,hourly,alerts&appid=f1e5223681c99ba8e38c2214f7c97f43'
     )
       .then(function(response) {
         return response.json();
