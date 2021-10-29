@@ -1,16 +1,27 @@
+// TO Do: Work on Format for page
+// Add color ranges for UV Index
+// Assure icons tranlate in format
+// Local storage of city entered
+// Repopulate screen with local storage items- see work day calendar (sort by alpha or most recent)- determine max length
+// Filter duplicates from storage
+// READme
+// Submission Memo
+
 function myFunction() {
   var searchCity = document.getElementById("searchcity").value;
   // Add Date information with moment.js
-  var currentDate = moment().format('ll');
-  var currentp1Date = moment().add(1,'days').calendar();
-  var currentp2Date = moment().add(2,'days').calendar();
-  var currentp3Date = moment().add(3,'days').calendar();
-  var currentp4Date = moment().add(4,'days').calendar();
-  console.log(currentDate);
-  console.log(currentp1Date);
-  console.log(currentp2Date);
-  console.log(currentp3Date);
-  console.log(currentp4Date);
+  var today = moment();
+  var currentDate = moment(today).format("ll");
+  var currentp1Date = moment(today, "DD-MM-YYY").add(1, "days");
+  var currentp1Datef = moment(currentp1Date).format("ll");
+  var currentp2Date = moment(today, "DD-MM-YYY").add(2, "days");
+  var currentp2Datef = moment(currentp2Date).format("ll");
+  var currentp3Date = moment(today, "DD-MM-YYY").add(3, "days");
+  var currentp3Datef = moment(currentp3Date).format("ll");
+  var currentp4Date = moment(today, "DD-MM-YYY").add(4, "days");
+  var currentp4Datef = moment(currentp4Date).format("ll");
+  var currentp5Date = moment(today, "DD-MM-YYY").add(5, "days");
+  var currentp5Datef = moment(currentp5Date).format("ll");
 
   fetch(
     //API to translate the city entered into latitude and longitude
@@ -18,7 +29,7 @@ function myFunction() {
       searchCity +
       "&appid=f1e5223681c99ba8e38c2214f7c97f43"
   )
-      .then(function (geoResponse) {
+    .then(function (geoResponse) {
       return geoResponse.json();
     })
     .then(function (geoResponse) {
@@ -27,81 +38,58 @@ function myFunction() {
       var cityLongitude = geoResponse[0].lon;
       console.log(cityLatitude);
       console.log(cityLongitude);
-    //API to gather all the current and 4 day forecast based on latitude and logitude returned
+      //API to gather all the current and 4 day forecast based on latitude and logitude returned
       return fetch(
         "https://api.openweathermap.org/data/2.5/onecall?lat=" +
           cityLatitude +
           "&lon=" +
           cityLongitude +
           "&units=imperial&exclude=minutely,hourly,alerts&appid=f1e5223681c99ba8e38c2214f7c97f43"
-      )
+      );
     })
     .then(function (response) {
       return response.json();
     })
     .then(function (response) {
       //verified values all correct
-      console.log(response.current.dt);
-      // how to translate date number to current date Moment.js?
-      console.log(response.current.temp);
-      //what value is the temp using ?
-      console.log(response.current.humidity);
-      //how best to describe the humidity
-      console.log(response.current.uvi);
-      //use colors to indicate ranges
-      console.log(response.current.wind_speed);
-      //is wind speed k/hr or miles/hr
-      console.log(response.current.weather[0].icon);
-      //how to translate to photo
-      console.log(response.daily[0].dt);
-      // how to translate date number to current date Moment.js?
+      console.log(currentDate);
+      // include date from currentDate
       console.log(response.daily[0].temp.day);
-      //what value is the temp using ?
-      console.log(response.daily[0].humidity);
-      //how best to describe the humidity
+      //add dgree symbol and F to the end- no rounding needed
       console.log(response.daily[0].wind_speed);
-      //is wind speed k/hr or miles/hr
+      //wind speed MPH
+      console.log(response.daily[0].humidity);
+      //round to no decimals and % symbol to the end
       console.log(response.daily[0].uvi);
-      //use colors to indicate ranges
-      console.log(response.daily[0].weather[0].icon);
-      // http://api.openweathermap.org/img/w/*.png replace * with code of the icon
-      console.log(response.daily[1].dt);
-      // how to translate date number to current date Moment.js?
-      console.log(response.daily[1].temp.day);
-      //what value is the temp using ?
-      console.log(response.daily[1].humidity);
-      //how best to describe the humidity
-      console.log(response.daily[1].wind_speed);
-      //is wind speed k/hr or miles/hr
-      console.log(response.daily[1].uvi);
-      //use colors to indicate ranges
+      //  Based on UV Index scale CDC - 0-2 minimal- green, 3-5 low- yellow, 6-7 moderate- orange, 8-10 high- red, >11 extreme- purple
+      //  https://www.aimatmelanoma.org/melanoma-101/prevention/what-is-ultraviolet-uv-radiation/- SRC for color variations
+      console.log(currentp1Datef);
       console.log(response.daily[1].weather[0].icon);
-      //how to translate to photo
-      console.log(response.daily[2].dt);
-      // how to translate date number to current date Moment.js?
-      console.log(response.daily[2].temp.day);
-      //what value is the temp using ?
-      console.log(response.daily[2].humidity);
-      //how best to describe the humidity
-      console.log(response.daily[2].wind_speed);
-      //is wind speed k/hr or miles/hr
-      console.log(response.daily[2].uvi);
-      //use colors to indicate ranges
+      // http://api.openweathermap.org/img/w/*.png replace * with code of the icon
+      console.log(response.daily[1].temp.day);
+      console.log(response.daily[1].wind_speed);
+      console.log(response.daily[1].humidity);
+      console.log(currentp2Datef);
       console.log(response.daily[2].weather[0].icon);
-      //how to translate to photo
-      console.log(response.daily[3].dt);
-      // how to translate date number to current date Moment.js?
-      console.log(response.daily[3].temp.day);
-      //what value is the temp using ?
-      console.log(response.daily[3].humidity);
-      //how best to describe the humidity
-      console.log(response.daily[3].wind_speed);
-      //is wind speed k/hr or miles/hr
-      console.log(response.daily[3].uvi);
-      //use colors to indicate ranges
+      console.log(response.daily[2].temp.day); 
+      console.log(response.daily[2].wind_speed);
+      console.log(response.daily[2].humidity);
+      console.log(currentp3Datef);
       console.log(response.daily[3].weather[0].icon);
-      //how to translate to photo
-      //how to translate to photo
+      console.log(response.daily[3].temp.day);
+      console.log(response.daily[3].wind_speed);
+      console.log(response.daily[3].humidity);
+      console.log(currentp4Datef);
+      console.log(response.daily[4].weather[0].icon);
+      console.log(response.daily[4].temp.day);
+      console.log(response.daily[4].wind_speed);
+      console.log(response.daily[4].humidity);
+      console.log(currentp5Datef);
+      console.log(response.daily[4].weather[0].icon);
+      console.log(response.daily[4].temp.day);
+      console.log(response.daily[4].wind_speed);
+      console.log(response.daily[4].humidity);
+
       // var responseContainerEl = document.querySelector('#response-container');
       // responseContainerEl.innerHTML = '';
       // var gifImg = document.createElement('img');
