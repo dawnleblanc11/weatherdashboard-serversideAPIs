@@ -1,7 +1,17 @@
 function myFunction() {
   var searchCity = document.getElementById("searchcity").value;
-  var ratingtype = document.getElementById("priorcity").value;
-  // Create a variable to hold the value of rating
+  // Add Date information with moment.js
+  var currentDate = moment().format('ll');
+  var currentp1Date = moment().add(1,'days').calendar();
+  var currentp2Date = moment().add(2,'days').calendar();
+  var currentp3Date = moment().add(3,'days').calendar();
+  var currentp4Date = moment().add(4,'days').calendar();
+  console.log(currentDate);
+  console.log(currentp1Date);
+  console.log(currentp2Date);
+  console.log(currentp3Date);
+  console.log(currentp4Date);
+
   fetch(
     //API to translate the city entered into latitude and longitude
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -12,8 +22,6 @@ function myFunction() {
       return geoResponse.json();
     })
     .then(function (geoResponse) {
-      console.log(geoResponse[0].lat);
-      console.log(geoResponse[0].lon);
       //creating variables to hold the geo response to searchCity
       var cityLatitude = geoResponse[0].lat;
       var cityLongitude = geoResponse[0].lon;
@@ -56,7 +64,7 @@ function myFunction() {
       console.log(response.daily[0].uvi);
       //use colors to indicate ranges
       console.log(response.daily[0].weather[0].icon);
-      //how to translate to photo
+      // http://api.openweathermap.org/img/w/*.png replace * with code of the icon
       console.log(response.daily[1].dt);
       // how to translate date number to current date Moment.js?
       console.log(response.daily[1].temp.day);
