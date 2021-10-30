@@ -1,0 +1,12 @@
+header {
+    background-color:blue;
+    color: white;
+    font-weight: bold;
+}
+
+#currentweatherbox {
+    border: 1px solid black;
+}
+#searchbox {
+    border: 1px solid black;
+}
