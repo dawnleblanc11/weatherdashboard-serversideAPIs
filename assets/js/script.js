@@ -5,16 +5,49 @@
 // make all weather cards dunamic and loop through to appear- shorter code
 // Repopulate screen with local storage items- see work day calendar (sort by alpha or most recent)- determine max length
 // Filter duplicates from storage
-// READme
+// change the onclick since can choose prior cities
+// READme- ADD Photos and fix details
 // Submission Memo
+//$(document).ready(function() {
+//  if (citySearchList == null) {
+//    citySearchList = {};
+//  };
+//  createCitylist(citySearchList);
 
-function myFunction() {
-  var searchCity = document.getElementById("searchcity").value;
+//  $("#").hide(currentweatherbox);
+//  $("#forecast-weather").hide(forecast-weather);
+//}
+var citySearchList =[]; 
 
+function getCity() {
+  var searchCity = document.getElementById("city").value;
+  var citylist= document.getElementById("city-list");
+  citylist.innerHTML = searchCity;
+  populateweather(searchCity);
+  createCitylist(searchCity);
+  console.log(citySearchList);
+};
+
+
+function createCitylist(anycity) {
+  citySearchList.push(anycity);
+  localStorage.setItem("citySearchList", JSON.stringify(citySearchList));
+
+  
+  //$("city-list").empty();
+//  var citySearchListparsed = JSON.parse(window.localStorage.getItem("citySearchList")
+//  );
+//  for (i = 0; i < citySearchListparsed.length; i++) {
+//    $("city-list").val(citySearchListparsed[i]);
+//  }
+};
+
+function populateweather(anycity) {
+  
   fetch(
     //API to translate the city entered into latitude and longitude
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
-      searchCity +
+      anycity +
       "&appid=f1e5223681c99ba8e38c2214f7c97f43"
   )
     .then(function (geoResponse) {
@@ -50,7 +83,7 @@ function myFunction() {
         "http://api.openweathermap.org/img/w/" + currentweathericon + ".png";
       // http://api.openweathermap.org/img/w/*.png replace * with code of the icon
       $("#currentcitydateicon").html(
-        searchCity +
+        anycity +
           "  " +
           currentDate +
           "  " +
@@ -210,4 +243,9 @@ function myFunction() {
       //round to no decimals and % symbol to the end
       // end Day Plus 5 Section
     });
-}
+};
+
+
+//createCitylist();
+
+//localStorage.setItem("citySearchList", JSON.stringify(citySearchList));/

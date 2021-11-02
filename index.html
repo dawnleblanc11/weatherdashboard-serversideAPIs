@@ -7,60 +7,41 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
   </head>
-  <header class="col-sm-12">
+  <header class="heading">
+    <div>
     <h1>Weather Dashboard</h1>
+  </div>
   </header>
   <body>
     <!-- Creates Overall Grid -->
-    <div class="container"></div>
+    <div class="container-fluid"></div>
     <!-- City Info -->
-    <div class="row">
-        <div class="col-sm-3" id="searchbox">
-                <h1>Search for a city:</h1>
-                <div><input type="text" id="searchcity" value="San Diego"/></div>
-                <div>
-                  <button href="#" class="btn btn-primary" onclick="myFunction()">Search</button>
+    <div class="card" style="width:22rem;">
+        <div class="card-body" id="searchbox">
+                <h6>Search for a city:</h6>
+                <div id="searchcity"> 
+                  <input type="text" id="city" value="">
                 </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
-                </div>
-                <div>
-                  Prior cities:
+                  <button href="#" class="btn btn-primary" id="search" onclick="getCity()">Search</button>
+                  <ul class="list-group" id="city-list" ></ul>
                 </div>
         </div>
       </div>
     <!-- <div class="row"> -->
         
     <!-- </div> -->
-    <div class="row">
-    </div><div class="col-sm-7" id="currentweatherbox">
+    <div class="col-md-9">
+      <div class="card" id="currentweatherbox" >
+        <div class="card-body">
       <h1 id="currentcitydateicon"></h1>
-        <p id="temp"></p>
-        <p id="wind"></p>
-        <p id="humidity"></p>
-        <p id="uvindex"></p>
+        <p class="card-text" id="temp"></p>
+        <p class="card-text" id="wind"></p>
+        <p class="card-text" id="humidity"></p>
+        <p class="card-text"id="uvindex"></p>
     </div>
     </div>
     <div class="row">
-      <div class="col-sm-7">
+      <div class="col-sm-9" id="forecast-weather">
         <h1>5-Day Forecast:</h1>
     <div class="row">
       <div class="col-sm-2">
