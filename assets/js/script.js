@@ -4,51 +4,39 @@
 // make all weather cards dynamic and loop through to appear- shorter code
 // Filter duplicates from storage
 // how to handle cities added during session
-// Create an error message for not valid city
+// Create an error message for not valid city modal?
 // READme- ADD Photos and fix details
 // Submission Memo
-//$(document).ready(function() {
+
 //  if (citySearchList == null) {
 //    citySearchList = {};
 //  };
-//  createCitylist(citySearchList);
 
 //  $("#").hide(currentweatherbox);
 //  $("#forecast-weather").hide(forecast-weather);
-$(document).ready(function() {
-var citySearchListparsed = JSON.parse(
-  window.localStorage.getItem("storedCities")
-);
-console.log(citySearchListparsed);
-for (i = 0; i < citySearchListparsed.length; i++) {
-  $("#city-list").append("<li>" + citySearchListparsed[i] + "</li>").on('click','li',function() {
-  $(this).css('background','#d9f531');
-  var index = $( "li" ).index( this );
-  populateweather(citySearchListparsed[index]);
-})}});
-//}
 
-
-function getCity() {
-  var searchCity = document.getElementById("city").value;
-  if (localStorage.getItem('storedCities') ==null){
-    localStorage.setItem('storedCities','[]');
+//  when page is loaded, list all prior cities in local storage and allows then to be clicked again to view weather
+$(document).ready(function () {
+  var citySearchListparsed = JSON.parse(
+    window.localStorage.getItem("storedCities")
+  );
+  for (i = 0; i < citySearchListparsed.length; i++) {
+    $("#city-list")
+      .append("<li>" + citySearchListparsed[i] + "</li>")
+      .on("click", "li", function () {
+        $(this).css("background", "#d9f531");
+        var index = $("li").index(this);
+        populateweather(citySearchListparsed[index]);
+      });
   }
-  var citySearchList = JSON.parse(localStorage.getItem('storedCities'));
-  citySearchList.push(searchCity);
-  localStorage.setItem('storedCities',JSON.stringify(citySearchList));
-  $("#city-list").append("<li>" + searchCity + "</li>").on('click','li',function() {
-    $(this).css('background','#d9f531');
-  });
-  populateweather(searchCity);
- // createCitylist(searchCity); 
-}
-var citySearchList = [];
+});
 
-function createCitylist(anycity) {
-  citySearchList.push(anycity);
-  localStorage.setItem("citySearchList", JSON.stringify(citySearchList));
-}
+//var citySearchList = [];
+
+//function createCitylist(anycity) {
+//  citySearchList.push(anycity);
+//  localStorage.setItem("citySearchList", JSON.stringify(citySearchList));
+//}
 
 //$("city-list").empty();
 //  for (i = 0; i < citySearchListparsed.length; i++) {
@@ -58,11 +46,8 @@ function createCitylist(anycity) {
 //    $("city-list").val(citySearchListparsed[i]);
 //  }
 //};
-//.on('click','li',function(){
-//  $('#lists li').css('background','#ffffff');
-//  $(this).css('background','#d9f531');
-//});
 
+// function to populate the weather
 function populateweather(anycity) {
   fetch(
     //API to translate the city entered into latitude and longitude
@@ -71,9 +56,15 @@ function populateweather(anycity) {
       "&appid=f1e5223681c99ba8e38c2214f7c97f43"
   )
     .then(function (geoResponse) {
+      console.log(geoResponse);
       return geoResponse.json();
     })
     .then(function (geoResponse) {
+      if (geoResponse[0] === undefined) {
+        //return getCity();
+        //can also try not === to process fetch
+        console.log("error");
+      }
       //creating variables to hold the geo response to searchCity
       var cityLatitude = geoResponse[0].lat;
       var cityLongitude = geoResponse[0].lon;
@@ -264,6 +255,27 @@ function populateweather(anycity) {
     });
 }
 
+// function to recognize a new city is entered an populates the weather
+function getCity() {
+  var searchCity = document.getElementById("city").value;
+  if (localStorage.getItem("storedCities") == null) {
+    localStorage.setItem("storedCities", "[]");
+  }
+  var citySearchList = JSON.parse(localStorage.getItem("storedCities"));
+  //removes duplicates before sendign to storage
+  if (citySearchList.indexOf(searchCity)=== -1) {
+    citySearchList.push(searchCity);
+  };
+  localStorage.setItem("storedCities", JSON.stringify(citySearchList));
+  $("#city-list")
+    .append("<li>" + searchCity + "</li>")
+    .on("click", "li", function () {
+      $(this).css("background", "#d9f531");
+      populateweather(searchCity);
+    });
+  populateweather(searchCity);
+  // buildmenu();
+}
 //createCitylist();
 
 //localStorage.setItem("citySearchList", JSON.stringify(citySearchList));/
