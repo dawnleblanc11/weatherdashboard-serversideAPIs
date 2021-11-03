@@ -1,11 +1,10 @@
 // TO Do: Work on Format for page
 // make color block smaller for background color//test other colors work
-// Local storage of city entered
 // Fix bootstrap formatting
-// make all weather cards dunamic and loop through to appear- shorter code
-// Repopulate screen with local storage items- see work day calendar (sort by alpha or most recent)- determine max length
+// make all weather cards dynamic and loop through to appear- shorter code
 // Filter duplicates from storage
-// change the onclick since can choose prior cities
+// how to handle cities added during session
+// Create an error message for not valid city
 // READme- ADD Photos and fix details
 // Submission Memo
 //$(document).ready(function() {
@@ -16,34 +15,55 @@
 
 //  $("#").hide(currentweatherbox);
 //  $("#forecast-weather").hide(forecast-weather);
+$(document).ready(function() {
+var citySearchListparsed = JSON.parse(
+  window.localStorage.getItem("storedCities")
+);
+console.log(citySearchListparsed);
+for (i = 0; i < citySearchListparsed.length; i++) {
+  $("#city-list").append("<li>" + citySearchListparsed[i] + "</li>").on('click','li',function() {
+  $(this).css('background','#d9f531');
+  var index = $( "li" ).index( this );
+  populateweather(citySearchListparsed[index]);
+})}});
 //}
-var citySearchList =[]; 
+
 
 function getCity() {
   var searchCity = document.getElementById("city").value;
-  var citylist= document.getElementById("city-list");
-  citylist.innerHTML = searchCity;
+  if (localStorage.getItem('storedCities') ==null){
+    localStorage.setItem('storedCities','[]');
+  }
+  var citySearchList = JSON.parse(localStorage.getItem('storedCities'));
+  citySearchList.push(searchCity);
+  localStorage.setItem('storedCities',JSON.stringify(citySearchList));
+  $("#city-list").append("<li>" + searchCity + "</li>").on('click','li',function() {
+    $(this).css('background','#d9f531');
+  });
   populateweather(searchCity);
-  createCitylist(searchCity);
-  console.log(citySearchList);
-};
-
+ // createCitylist(searchCity); 
+}
+var citySearchList = [];
 
 function createCitylist(anycity) {
   citySearchList.push(anycity);
   localStorage.setItem("citySearchList", JSON.stringify(citySearchList));
+}
 
-  
-  //$("city-list").empty();
-//  var citySearchListparsed = JSON.parse(window.localStorage.getItem("citySearchList")
+//$("city-list").empty();
+//  for (i = 0; i < citySearchListparsed.length; i++) {
+//$("city-list").append('<li>'+ val(citySearchListparsed[i]+ '<li>'));
 //  );
 //  for (i = 0; i < citySearchListparsed.length; i++) {
 //    $("city-list").val(citySearchListparsed[i]);
 //  }
-};
+//};
+//.on('click','li',function(){
+//  $('#lists li').css('background','#ffffff');
+//  $(this).css('background','#d9f531');
+//});
 
 function populateweather(anycity) {
-  
   fetch(
     //API to translate the city entered into latitude and longitude
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -57,8 +77,7 @@ function populateweather(anycity) {
       //creating variables to hold the geo response to searchCity
       var cityLatitude = geoResponse[0].lat;
       var cityLongitude = geoResponse[0].lon;
-      console.log(cityLatitude);
-      console.log(cityLongitude);
+
       //API to gather all the current and 5 day forecast based on latitude and logitude returned
       return fetch(
         "https://api.openweathermap.org/data/2.5/onecall?lat=" +
@@ -103,16 +122,16 @@ function populateweather(anycity) {
       var currentuvindex = response.daily[0].uvi;
       $("#uvindex").text("UV Index: " + currentuvindex);
 
-      if (currentuvindex<3) {
-        $("#uvindex").css("background-color","green");
-      } else if(currentuvindex>=3||currentuvindex<6) {
-        $("#uvindex").css("background-color","yellow");
-      } else if (currentuvindex>=6||currentuvindex<8) {
-      $("#uvindex").css("background-color","orange");
-      } else if (currentuvindex>=8||currentuvindex<11) {
-      $("#uvindex").css("background-color","red");
+      if (currentuvindex < 3) {
+        $("#uvindex").css("background-color", "green");
+      } else if (currentuvindex >= 3 || currentuvindex < 6) {
+        $("#uvindex").css("background-color", "yellow");
+      } else if (currentuvindex >= 6 || currentuvindex < 8) {
+        $("#uvindex").css("background-color", "orange");
+      } else if (currentuvindex >= 8 || currentuvindex < 11) {
+        $("#uvindex").css("background-color", "red");
       } else {
-      $("#uvindex").css("background-color","purple");
+        $("#uvindex").css("background-color", "purple");
       }
 
       //  ToDo: Set Background color
@@ -243,8 +262,7 @@ function populateweather(anycity) {
       //round to no decimals and % symbol to the end
       // end Day Plus 5 Section
     });
-};
-
+}
 
 //createCitylist();
 
