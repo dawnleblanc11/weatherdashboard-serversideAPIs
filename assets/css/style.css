@@ -9,6 +9,26 @@ body {
     padding: 10px;
     text-align: center;
 }
+.btn {
+    background-color:#d9f531;
+    color:#0b3c5d;
+}
+.row.content {height: 1500px}
+
+.sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    padding-left: 30px;
+    padding-top: 30px;
+  }
+
+.card {
+    padding-left: 30px;
+}
+
+h2 {
+    font-size: 30px;
+}
 
 #currentweatherbox {
     border: 1px solid black;
@@ -16,3 +36,19 @@ body {
 #searchbox {
     border: 1px solid black;
 }
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 1025px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: 1000px;} 
+    }
+
+@media screen and (max-width: 767px) {
+    .sidenav {
+      height: auto;
+      padding: 15px;
+    }
+    .row.content {height: auto;} 
+  }

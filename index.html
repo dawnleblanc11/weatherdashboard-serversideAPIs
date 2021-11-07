@@ -15,87 +15,85 @@
   <body>
     <!-- Creates Overall Grid -->
     <div class="container-fluid"></div>
-    <!-- City Info -->
-    <div class="card" style="width:22rem;">
-        <div class="card-body" id="searchbox">
-                <h6>Search for a city:</h6>
+    <!-- City Info Newly Entered and From Local Storage -->
+        <div class="row content" id="searchbox">
+          <div class="col-sm-2 sidenav">
+                <h3>Search for a city:</h3>
                 <div id="searchcity"> 
                   <input type="text" id="city" value="">
                 </div>
-                  <button href="#" class="btn btn-primary" id="search" onclick="getCity()">Search</button>
+                  <button href="#" class="btn" id="search" onclick="getCity()">Search</button>
+                  <br><br>
                   <ul class="list-group" id="city-list" ></ul>
-                </div>
-        </div>
-      </div>
-    <!-- <div class="row"> -->
-        
-    <!-- </div> -->
-    <div class="col-md-9">
-      <div class="card" id="currentweatherbox" >
-        <div class="card-body">
-      <h1 id="currentcitydateicon"></h1>
-        <p class="card-text" id="temp"></p>
-        <p class="card-text" id="wind"></p>
-        <p class="card-text" id="humidity"></p>
-        <p class="card-text"id="uvindex"></p>
-    </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-9" id="forecast-weather">
-        <h1>5-Day Forecast:</h1>
-    <div class="row">
-      <div class="col-sm-2">
-        <div class="card text-white bg-dark mb3">
-          <div class="p1card-body">
-            <p id="p1date"></p>
-            <p id="p1temp"></p>
-            <p id="p1wind"></p>
-            <p id="p1humidity"></p>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <div class="card text-white bg-dark mb3">
-          <div class="p2card-body">
-            <p id="p2date"></p>
-            <p id="p2temp"></p>
-            <p id="p2wind"></p>
-            <p id="p2humidity"></p>
+    <!-- Current Weather will appear after City Entered-->
+                <div class="col-lg-10" id="currentweatherbox">
+                  <h2>Current Weather</h2>
+                  <h1 id="currentcitydateicon"></h1>
+                    <p class="currentweathertext" id="temp"></p>
+                    <p class="currentweathertext" id="wind"></p>
+                    <p class="currentweathertext" id="humidity"></p>
+                    <p class="currentweathertext" id="uvindex"></p>
+                    <br><br>
+      <!-- Forecast Weather will appear after City Entered-->
+                    <div class="col-lg-10" id="forecast-weather">
+                  <h2>5 Day Forecast</h2>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <div class="card text-white bg-dark mb3">
+                        <div class="p1card-body">
+                          <p id="p1date"></p>
+                          <p id="p1temp"></p>
+                          <p id="p1wind"></p>
+                          <p id="p1humidity"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="card text-white bg-dark mb3">
+                        <div class="p2card-body">
+                          <p id="p2date"></p>
+                          <p id="p2temp"></p>
+                          <p id="p2wind"></p>
+                          <p id="p2humidity"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="card text-white bg-dark mb3">
+                        <div class="p3card-body">
+                            <p id="p3date"></p>
+                            <p id="p3temp"></p>
+                            <p id="p3wind"></p>
+                            <p id="p3humidity"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="card text-white bg-dark mb3">
+                        <div class="p4card-body">
+                          <p id="p4date"></p>
+                          <p id="p4temp"></p>
+                          <p id="p4wind"></p>
+                          <p id="p4humidity"></p>  
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="card text-white bg-dark mb3">
+                        <div class="p5card-body">
+                          <p id="p5date"></p>
+                          <p id="p5temp"></p>
+                          <p id="p5wind"></p>
+                          <p id="p5humidity"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <div class="card text-white bg-dark mb3">
-          <div class="p3card-body">
-              <p id="p3date"></p>
-              <p id="p3temp"></p>
-              <p id="p3wind"></p>
-              <p id="p3humidity"></p>
           </div>
-        </div>
       </div>
-      <div class="col-sm-2">
-        <div class="card text-white bg-dark mb3">
-          <div class="p4card-body">
-            <p id="p4date"></p>
-            <p id="p4temp"></p>
-            <p id="p4wind"></p>
-            <p id="p4humidity"></p>  
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <div class="card text-white bg-dark mb3">
-          <div class="p5card-body">
-            <p id="p5date"></p>
-            <p id="p5temp"></p>
-            <p id="p5wind"></p>
-            <p id="p5humidity"></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="response-container"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="assets/js/script.js"></script>

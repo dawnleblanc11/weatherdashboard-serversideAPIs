@@ -1,28 +1,19 @@
-// TO Do: Work on Format for page
-// make color block smaller for background color//test other colors work
-// Fix bootstrap formatting
+// TO Do: Work on Format for page Fonts: Colors: Responsiveness
 // make all weather cards dynamic and loop through to appear- shorter code
-// Filter duplicates from storage
-// how to handle cities added during session
-// Create an error message for not valid city modal?
-// READme- ADD Photos and fix details
-// Submission Memo
+const api= '30f2bb2d606265bc2fdc40591608cf8e';
 
-//  if (citySearchList == null) {
-//    citySearchList = {};
-//  };
-
-//  $("#").hide(currentweatherbox);
-//  $("#forecast-weather").hide(forecast-weather);
-
-//  when page is loaded, list all prior cities in local storage and allows then to be clicked again to view weather
 $(document).ready(function () {
+  $("#currentweatherbox").hide();
+  $("#forecast-weather").hide();
+  if (localStorage.getItem("storedCities") == null) {
+    localStorage.setItem("storedCities", "[]");
+  };
   var citySearchListparsed = JSON.parse(
     window.localStorage.getItem("storedCities")
   );
   for (i = 0; i < citySearchListparsed.length; i++) {
     $("#city-list")
-      .append("<li>" + citySearchListparsed[i] + "</li>")
+      .append("<li>" + citySearchListparsed[i] + "</li>").css("list-style-type","none")
       .on("click", "li", function () {
         $(this).css("background", "#d9f531");
         var index = $("li").index(this);
@@ -31,40 +22,49 @@ $(document).ready(function () {
   }
 });
 
-//var citySearchList = [];
-
-//function createCitylist(anycity) {
-//  citySearchList.push(anycity);
-//  localStorage.setItem("citySearchList", JSON.stringify(citySearchList));
-//}
-
-//$("city-list").empty();
-//  for (i = 0; i < citySearchListparsed.length; i++) {
-//$("city-list").append('<li>'+ val(citySearchListparsed[i]+ '<li>'));
-//  );
-//  for (i = 0; i < citySearchListparsed.length; i++) {
-//    $("city-list").val(citySearchListparsed[i]);
-//  }
-//};
+// function to recognize a new city is entered an populates the weather
+// adds to the list and alllows a reclick for returning to information
+function getCity() {
+  var searchCity = document.getElementById("city").value;
+  // initialize localStorage array
+  if (localStorage.getItem("storedCities") == null) {
+    localStorage.setItem("storedCities", "[]");
+  }
+  var citySearchList = JSON.parse(localStorage.getItem("storedCities"));
+  //removes duplicates before sending to storage
+  if (citySearchList.indexOf(searchCity)=== -1) {
+    citySearchList.push(searchCity);
+  };
+  //sends to local storage
+  localStorage.setItem("storedCities", JSON.stringify(citySearchList));
+  //adds to the running City List
+  $("#city-list")
+    .prepend("<li>" + searchCity + "</li>").css("list-style-type","none")
+    .on("click", "li", function () {
+      $(this).css("background", "#d9f531");
+  //populates weather for city from list
+      populateweather(searchCity);
+    });
+  //populates weather for city entered
+  populateweather(searchCity);
+  // buildmenu();
+};
 
 // function to populate the weather
 function populateweather(anycity) {
+  $("#currentweatherbox").show();
+  $("#forecast-weather").show();
   fetch(
     //API to translate the city entered into latitude and longitude
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
       anycity +
-      "&appid=f1e5223681c99ba8e38c2214f7c97f43"
+      "&appid=" + api
   )
     .then(function (geoResponse) {
-      console.log(geoResponse);
       return geoResponse.json();
     })
     .then(function (geoResponse) {
-      if (geoResponse[0] === undefined) {
-        //return getCity();
-        //can also try not === to process fetch
-        console.log("error");
-      }
+      
       //creating variables to hold the geo response to searchCity
       var cityLatitude = geoResponse[0].lat;
       var cityLongitude = geoResponse[0].lon;
@@ -75,7 +75,7 @@ function populateweather(anycity) {
           cityLatitude +
           "&lon=" +
           cityLongitude +
-          "&units=imperial&exclude=minutely,hourly,alerts&appid=f1e5223681c99ba8e38c2214f7c97f43"
+          "&units=imperial&exclude=minutely,hourly,alerts&appid=" + api
       );
     })
     .then(function (response) {
@@ -114,23 +114,22 @@ function populateweather(anycity) {
       $("#uvindex").text("UV Index: " + currentuvindex);
 
       if (currentuvindex < 3) {
-        $("#uvindex").css("background-color", "green");
+        $("#uvindex").css({"display":"inline-flex","background-color": "green"});
       } else if (currentuvindex >= 3 || currentuvindex < 6) {
-        $("#uvindex").css("background-color", "yellow");
+        $("#uvindex").css({"display":"inline-flex","background-color": "yellow"});
       } else if (currentuvindex >= 6 || currentuvindex < 8) {
-        $("#uvindex").css("background-color", "orange");
+        $("#uvindex").css({"display": "inline-flex","background-color": "orange"});
       } else if (currentuvindex >= 8 || currentuvindex < 11) {
-        $("#uvindex").css("background-color", "red");
+        $("#uvindex").css({"display": "inline-flex","background-color": "red"});
       } else {
-        $("#uvindex").css("background-color", "purple");
+        $("#uvindex").css({"display": "inline-flex","background-color": "purple"});
       }
-
-      //  ToDo: Set Background color
       //  Based on UV Index scale CDC - 0-2 minimal- green, 3-5 low- yellow, 6-7 moderate- orange, 8-10 high- red, >11 extreme- purple
       //  https://www.aimatmelanoma.org/melanoma-101/prevention/what-is-ultraviolet-uv-radiation/- SRC for color variations
       //end Current Weather Section
-      //TO DO: Add Section Header Here
+
       //start Day Plus 1 Section
+      
       var currentp1Date = moment(today, "DD-MM-YYY").add(1, "days");
       var currentp1Datef = moment(currentp1Date).format("ll");
       //date from moment.js
@@ -146,13 +145,13 @@ function populateweather(anycity) {
           " alt='WeatherIcon'>"
       );
       var p1temp = response.daily[1].temp.day;
-      $("#p1temp").text("Temp: " + p1temp + "°F");
+      $("#p1temp").text("Temp:  " + p1temp + "°F");
       //add dgree symbol and F to the end- no rounding needed
       var p1windspeed = response.daily[1].wind_speed;
-      $("#p1wind").text("Wind: " + p1windspeed + " MPH");
+      $("#p1wind").text("Wind:  " + p1windspeed + " MPH");
       //wind speed MPH
       var p1humidity = response.daily[1].humidity.toPrecision(2);
-      $("#p1humidity").text("Humidity: " + p1humidity + "%");
+      $("#p1humidity").text("Humidity:  " + p1humidity + "%");
       //round to no decimals and % symbol to the end
       // end Day Plus 1 Section
       // start Day Plus 2 Section
@@ -171,13 +170,13 @@ function populateweather(anycity) {
           " alt='WeatherIcon'>"
       );
       var p2temp = response.daily[2].temp.day;
-      $("#p2temp").text("Temp: " + p2temp + "°F");
+      $("#p2temp").text("Temp:  " + p2temp + "°F");
       //add dgree symbol and F to the end- no rounding needed
       var p2windspeed = response.daily[2].wind_speed;
-      $("#p2wind").text("Wind: " + p2windspeed + " MPH");
+      $("#p2wind").text("Wind:  " + p2windspeed + " MPH");
       //wind speed MPH
       var p2humidity = response.daily[2].humidity.toPrecision(2);
-      $("#p2humidity").text("Humidity: " + p2humidity + "%");
+      $("#p2humidity").text("Humidity:  " + p2humidity + "%");
       //round to no decimals and % symbol to the end
       //end Day Plus 2 Section
       //start Day Plus 3 Section
@@ -195,13 +194,13 @@ function populateweather(anycity) {
           " alt='WeatherIcon'>"
       );
       var p3temp = response.daily[3].temp.day;
-      $("#p3temp").text("Temp: " + p3temp + "°F");
+      $("#p3temp").text("Temp:  " + p3temp + "°F");
       //add dgree symbol and F to the end- no rounding needed
       var p3windspeed = response.daily[3].wind_speed;
-      $("#p3wind").text("Wind: " + p3windspeed + " MPH");
+      $("#p3wind").text("Wind:  " + p3windspeed + " MPH");
       //wind speed MPH
       var p3humidity = response.daily[3].humidity.toPrecision(2);
-      $("#p3humidity").text("Humidity: " + p3humidity + "%");
+      $("#p3humidity").text("Humidity:  " + p3humidity + "%");
       //round to no decimals and % symbol to the end
       //end Day Plus 3 Section
       //start Day Plus 4 Section
@@ -219,13 +218,13 @@ function populateweather(anycity) {
           " alt='WeatherIcon'>"
       );
       var p4temp = response.daily[4].temp.day;
-      $("#p4temp").text("Temp: " + p4temp + "°F");
+      $("#p4temp").text("Temp:  " + p4temp + "°F");
       //add dgree symbol and F to the end- no rounding needed
       var p4windspeed = response.daily[4].wind_speed;
-      $("#p4wind").text("Wind: " + p4windspeed + " MPH");
+      $("#p4wind").text("Wind:  " + p4windspeed + " MPH");
       //wind speed MPH
       var p4humidity = response.daily[4].humidity.toPrecision(2);
-      $("#p4humidity").text("Humidity: " + p4humidity + "%");
+      $("#p4humidity").text("Humidity:  " + p4humidity + "%");
       //round to no decimals and % symbol to the end
       // end Day Plus 4 section
       // start Day Plus 5 Section
@@ -243,39 +242,16 @@ function populateweather(anycity) {
           " alt='WeatherIcon'>"
       );
       var p5temp = response.daily[5].temp.day;
-      $("#p5temp").text("Temp: " + p5temp + "°F");
+      $("#p5temp").text("Temp:  " + p5temp + "°F");
       //add dgree symbol and F to the end- no rounding needed
       var p5windspeed = response.daily[5].wind_speed;
-      $("#p5wind").text("Wind: " + p5windspeed + " MPH");
+      $("#p5wind").text("Wind:  " + p5windspeed + " MPH");
       //wind speed MPH
       var p5humidity = response.daily[5].humidity.toPrecision(2);
-      $("#p5humidity").text("Humidity: " + p5humidity + "%");
+      $("#p5humidity").text("Humidity:  " + p5humidity + "%");
       //round to no decimals and % symbol to the end
       // end Day Plus 5 Section
     });
 }
 
-// function to recognize a new city is entered an populates the weather
-function getCity() {
-  var searchCity = document.getElementById("city").value;
-  if (localStorage.getItem("storedCities") == null) {
-    localStorage.setItem("storedCities", "[]");
-  }
-  var citySearchList = JSON.parse(localStorage.getItem("storedCities"));
-  //removes duplicates before sendign to storage
-  if (citySearchList.indexOf(searchCity)=== -1) {
-    citySearchList.push(searchCity);
-  };
-  localStorage.setItem("storedCities", JSON.stringify(citySearchList));
-  $("#city-list")
-    .append("<li>" + searchCity + "</li>")
-    .on("click", "li", function () {
-      $(this).css("background", "#d9f531");
-      populateweather(searchCity);
-    });
-  populateweather(searchCity);
-  // buildmenu();
-}
-//createCitylist();
 
-//localStorage.setItem("citySearchList", JSON.stringify(citySearchList));/
